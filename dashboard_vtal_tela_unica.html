@@ -1,0 +1,419 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-sans,sans-serif);background:#2e2e2e;color:#e8e8e8;font-size:14px;}
+.dash{padding:0;background:#2e2e2e;min-height:100vh;}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#252525;border-bottom:2px solid #ccff00;}
+.logo-wrap{display:flex;align-items:center;gap:0;}
+.logo-dot{width:6px;height:6px;border-radius:50%;background:#ccff00;margin-bottom:10px;margin-left:1px;margin-right:1px;}
+.logo-text{font-size:22px;font-weight:300;color:#ffffff;letter-spacing:0.04em;line-height:1;}
+.logo-v{font-size:22px;font-weight:300;color:#ffffff;}
+.top-center{display:flex;flex-direction:column;align-items:center;}
+.page-title{font-size:15px;font-weight:500;color:#ccff00;letter-spacing:0.12em;text-transform:uppercase;}
+.page-sub{font-size:10px;color:#888;letter-spacing:0.06em;margin-top:2px;}
+.top-right{display:flex;align-items:center;gap:10px;}
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ccff00;margin-right:5px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.clock{font-size:12px;color:#888;}
+
+.content{padding:14px 18px;}
+
+/* KPIs */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:8px;}
+.kpi{background:#1e1e1e;border:0.5px solid #383838;border-radius:8px;padding:13px 14px;cursor:pointer;transition:border-color 0.15s,background 0.15s;position:relative;}
+.kpi:hover{border-color:#ccff00;background:#252500;}
+.kpi.active{border-color:#ccff00;background:#252500;}
+.kpi.active::after{content:'';position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:8px solid #383838;z-index:2;}
+.kpi-label{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;line-height:1.3;}
+.kpi-value{font-size:28px;font-weight:500;line-height:1;}
+.kpi-sub{font-size:10px;color:#555;margin-top:4px;}
+.kpi-hint{font-size:10px;color:#ccff00;margin-top:5px;opacity:0;}
+.kpi:hover .kpi-hint,.kpi.active .kpi-hint{opacity:1;}
+.kpi.red .kpi-value{color:#ff6b6b;}
+.kpi.orange .kpi-value{color:#ff9f43;}
+.kpi.yellow .kpi-value{color:#ccff00;}
+.kpi.white .kpi-value{color:#e8e8e8;}
+
+/* DRILL */
+.drill{display:none;background:#1a1a1a;border:0.5px solid #383838;border-left:3px solid #ccff00;border-radius:8px;padding:16px;margin-bottom:10px;}
+.drill.open{display:block;}
+.drill-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.drill-title{font-size:11px;font-weight:500;color:#ccff00;text-transform:uppercase;letter-spacing:0.06em;}
+.drill-close{cursor:pointer;font-size:18px;color:#555;padding:2px 7px;border-radius:4px;}
+.drill-close:hover{color:#e8e8e8;background:#2a2a2a;}
+
+/* CARDS */
+.section-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.card{background:#1e1e1e;border:0.5px solid #383838;border-radius:9px;padding:14px;}
+.card-title{font-size:10px;font-weight:500;color:#666;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:11px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px;}
+
+/* BADGES */
+.badge{font-size:10px;font-weight:500;padding:3px 8px;border-radius:20px;white-space:nowrap;}
+.br{background:#3a1010;color:#ff6b6b;}
+.bo{background:#2a1800;color:#ff9f43;}
+.by{background:#2a2d00;color:#ccff00;}
+.bg{background:#0a2a10;color:#4ade80;}
+.bx{background:#252525;color:#666;}
+
+/* AGING */
+.aging-bar-wrap{display:flex;flex-direction:column;gap:8px;}
+.aging-row{display:flex;align-items:center;gap:9px;font-size:12px;}
+.aging-label{width:76px;color:#666;flex-shrink:0;}
+.aging-track{flex:1;height:10px;background:#2a2a2a;border-radius:3px;overflow:hidden;}
+.aging-fill{height:100%;border-radius:3px;}
+.aging-count{width:24px;text-align:right;font-weight:500;color:#ccc;}
+
+/* TECHS */
+.tech-chip{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:6px;background:#252525;margin-bottom:4px;font-size:12px;color:#bbb;}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dot-r{background:#ff6b6b;}.dot-o{background:#ff9f43;}.dot-g{background:#4ade80;}.dot-x{background:#444;}
+.divlabel{font-size:10px;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin:9px 0 6px;font-weight:500;}
+
+/* TABLES */
+.os-table{width:100%;border-collapse:collapse;font-size:12px;}
+.os-table th{text-align:left;color:#4a4a4a;font-weight:500;padding:0 8px 7px 0;border-bottom:0.5px solid #333;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;}
+.os-table td{padding:7px 8px 7px 0;border-bottom:0.5px solid #272727;color:#bbb;vertical-align:middle;}
+.os-table tr:last-child td{border-bottom:none;}
+.os-table tr.hl td{background:#1f1c00;}
+.os-table tr:hover td{background:#232323;}
+
+/* TABS */
+.tab-bar{display:flex;gap:5px;margin-bottom:11px;}
+.tab{padding:5px 12px;font-size:11px;border-radius:6px;cursor:pointer;border:0.5px solid #333;background:#252525;color:#666;font-weight:500;}
+.tab.active{background:#ccff00;color:#1a1a00;border-color:#ccff00;font-weight:600;}
+</style>
+
+<div class="dash">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <!-- LOGO V.tal -->
+    <div class="logo-wrap">
+      <svg width="80" height="32" viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <text x="0" y="24" font-family="Arial, sans-serif" font-weight="300" font-size="26" fill="#ffffff" letter-spacing="1">V</text>
+        <circle cx="28" cy="8" r="3.5" fill="#ccff00"/>
+        <text x="32" y="24" font-family="Arial, sans-serif" font-weight="300" font-size="26" fill="#ffffff" letter-spacing="1">tal</text>
+      </svg>
+    </div>
+
+    <div class="top-center">
+      <div class="page-title">Tela única — despacho</div>
+      <div class="page-sub">Operação de campo FTTH</div>
+    </div>
+
+    <div class="top-right">
+      <span class="live-dot"></span>
+      <span class="clock" id="clock">—</span>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- KPIs linha 1 -->
+    <div class="kpi-grid">
+      <div class="kpi red" id="kpi-os" onclick="toggleDrill('os',this)">
+        <div class="kpi-label">OS em aberto</div>
+        <div class="kpi-value">47</div>
+        <div class="kpi-sub">12 com aging crítico</div>
+        <div class="kpi-hint">▾ ver detalhes</div>
+      </div>
+      <div class="kpi orange" id="kpi-pri" onclick="toggleDrill('pri',this)">
+        <div class="kpi-label">Casos prioritários</div>
+        <div class="kpi-value">8</div>
+        <div class="kpi-sub">3 sem técnico alocado</div>
+        <div class="kpi-hint">▾ ver detalhes</div>
+      </div>
+      <div class="kpi red" id="kpi-ouv" onclick="toggleDrill('ouv',this)">
+        <div class="kpi-label">Ouvidoria</div>
+        <div class="kpi-value">5</div>
+        <div class="kpi-sub">2 sem atendimento</div>
+        <div class="kpi-hint">▾ ver detalhes</div>
+      </div>
+      <div class="kpi orange" id="kpi-livre" onclick="toggleDrill('livre',this)">
+        <div class="kpi-label">Técnicos s/ OS aberta</div>
+        <div class="kpi-value">4</div>
+        <div class="kpi-sub">de 18 ativos</div>
+        <div class="kpi-hint">▾ ver detalhes</div>
+      </div>
+    </div>
+
+    <!-- KPIs linha 2 -->
+    <div class="kpi-grid" style="margin-bottom:12px;">
+      <div class="kpi yellow" id="kpi-tmf" onclick="toggleDrill('tmf',this)">
+        <div class="kpi-label">TM fechamento OS</div>
+        <div class="kpi-value">1h38</div>
+        <div class="kpi-sub">meta: &lt; 2h</div>
+        <div class="kpi-hint">▾ ver detalhes</div>
+      </div>
+      <div class="kpi yellow" id="kpi-tmd" onclick="toggleDrill('tmd',this)">
+        <div class="kpi-label">TM deslocamento</div>
+        <div class="kpi-value">24min</div>
+        <div class="kpi-sub">meta: &lt; 30min</div>
+        <div class="kpi-hint">▾ ver detalhes</div>
+      </div>
+      <div class="kpi orange" id="kpi-pend" onclick="toggleDrill('pend',this)">
+        <div class="kpi-label">Fechadas c/ pendência</div>
+        <div class="kpi-value">6</div>
+        <div class="kpi-sub">no dia</div>
+        <div class="kpi-hint">▾ ver detalhes</div>
+      </div>
+      <div class="kpi white" id="kpi-log" onclick="toggleDrill('log',this)">
+        <div class="kpi-label">Técnicos logados</div>
+        <div class="kpi-value">18</div>
+        <div class="kpi-sub">de 22 escalados</div>
+        <div class="kpi-hint">▾ ver detalhes</div>
+      </div>
+    </div>
+
+    <!-- DRILL-DOWNS -->
+    <div class="drill" id="drill-os">
+      <div class="drill-header">
+        <span class="drill-title">OS em aberto — aging detalhado (47)</span>
+        <span class="drill-close" onclick="closeDrill('os')">✕</span>
+      </div>
+      <div class="aging-bar-wrap" style="margin-bottom:14px;">
+        <div class="aging-row"><span class="aging-label">&lt; 1h</span><div class="aging-track"><div class="aging-fill" style="width:40%;background:#4ade80;"></div></div><span class="aging-count">19</span></div>
+        <div class="aging-row"><span class="aging-label">1h – 2h</span><div class="aging-track"><div class="aging-fill" style="width:34%;background:#ccff00;"></div></div><span class="aging-count">16</span></div>
+        <div class="aging-row"><span class="aging-label">2h – 4h</span><div class="aging-track"><div class="aging-fill" style="width:17%;background:#ff9f43;"></div></div><span class="aging-count">8</span></div>
+        <div class="aging-row"><span class="aging-label">&gt; 4h</span><div class="aging-track"><div class="aging-fill" style="width:8%;background:#ff6b6b;"></div></div><span class="aging-count">4</span></div>
+      </div>
+      <div class="divlabel" style="color:#ff6b6b;">OS críticas — aging &gt; 4h</div>
+      <table class="os-table"><thead><tr><th>OS</th><th>Cliente</th><th>Técnico</th><th>Abertura</th><th>Aging</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td>OS-00381</td><td>Maria Fernanda S.</td><td style="color:#ff6b6b;">Sem alocação</td><td>07:32</td><td><span class="badge br">5h 12min</span></td></tr>
+        <tr class="hl"><td>OS-00394</td><td>Empresa Alfa Ltda</td><td style="color:#ff6b6b;">Sem alocação</td><td>08:10</td><td><span class="badge br">4h 34min</span></td></tr>
+        <tr><td>OS-00407</td><td>João Batista M.</td><td>Carlos Mendes</td><td>09:00</td><td><span class="badge br">4h 20min</span></td></tr>
+        <tr><td>OS-00376</td><td>Hospital Central</td><td style="color:#ff6b6b;">Sem alocação</td><td>07:15</td><td><span class="badge br">5h 48min</span></td></tr>
+      </tbody></table>
+      <div class="divlabel" style="color:#ccff00;margin-top:12px;">OS com execução &gt; 2h em campo (BA)</div>
+      <table class="os-table"><thead><tr><th>OS</th><th>Técnico</th><th>Endereço</th><th>Tempo em campo</th></tr></thead>
+      <tbody>
+        <tr><td>OS-00412</td><td>João Ribeiro</td><td>R. das Flores, 142</td><td><span class="badge br">2h 44min</span></td></tr>
+        <tr><td>OS-00389</td><td>Carlos Mendes</td><td>Av. Central, 800</td><td><span class="badge bo">2h 11min</span></td></tr>
+        <tr><td>OS-00401</td><td>Paulo Santos</td><td>R. Ipê, 55</td><td><span class="badge bo">2h 03min</span></td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="drill" id="drill-pri">
+      <div class="drill-header">
+        <span class="drill-title">Casos prioritários (8) — 3 sem técnico alocado</span>
+        <span class="drill-close" onclick="closeDrill('pri')">✕</span>
+      </div>
+      <table class="os-table"><thead><tr><th>OS</th><th>Cliente</th><th>Técnico</th><th>Motivo</th><th>Aging</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td>OS-00376</td><td>Hospital Central</td><td style="color:#ff6b6b;">Sem alocação</td><td>Empresa crítica</td><td><span class="badge br">5h 48min</span></td><td><span class="badge br">Crítico</span></td></tr>
+        <tr class="hl"><td>OS-00382</td><td>UPA Norte</td><td style="color:#ff6b6b;">Sem alocação</td><td>Saúde pública</td><td><span class="badge br">5h 02min</span></td><td><span class="badge br">Crítico</span></td></tr>
+        <tr class="hl"><td>OS-00395</td><td>Farmácia 24h</td><td style="color:#ff6b6b;">Sem alocação</td><td>VIP</td><td><span class="badge bo">4h 21min</span></td><td><span class="badge bo">Aguardando</span></td></tr>
+        <tr><td>OS-00402</td><td>Escola Municipal</td><td>João Ribeiro</td><td>Educação</td><td><span class="badge bo">3h 15min</span></td><td><span class="badge bo">Em atend.</span></td></tr>
+        <tr><td>OS-00411</td><td>Delegacia 5ª</td><td>Carlos Mendes</td><td>Seg. pública</td><td><span class="badge bo">2h 50min</span></td><td><span class="badge bo">Em atend.</span></td></tr>
+        <tr><td>OS-00422</td><td>Banco Cooperativo</td><td>Paulo Santos</td><td>Financeiro</td><td><span class="badge bx">1h 55min</span></td><td><span class="badge bg">Normal</span></td></tr>
+        <tr><td>OS-00428</td><td>Clínica São Lucas</td><td>Ricardo F.</td><td>Saúde</td><td><span class="badge bx">1h 30min</span></td><td><span class="badge bg">Normal</span></td></tr>
+        <tr><td>OS-00435</td><td>Supermercado Max</td><td>Gustavo Nunes</td><td>VIP</td><td><span class="badge bx">0h 45min</span></td><td><span class="badge bg">Normal</span></td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="drill" id="drill-ouv">
+      <div class="drill-header">
+        <span class="drill-title">Ouvidoria (5) — 2 sem atendimento hoje</span>
+        <span class="drill-close" onclick="closeDrill('ouv')">✕</span>
+      </div>
+      <table class="os-table"><thead><tr><th>OS</th><th>Cliente</th><th>Técnico</th><th>Protocolo</th><th>Abertura</th><th>Aging</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td>OS-00381</td><td>Maria Fernanda S.</td><td style="color:#ff6b6b;">Sem alocação</td><td>OUV-2026-0841</td><td>07:32</td><td><span class="badge br">5h 12min</span></td><td><span class="badge br">Crítico</span></td></tr>
+        <tr class="hl"><td>OS-00394</td><td>Empresa Alfa Ltda</td><td style="color:#ff6b6b;">Sem alocação</td><td>OUV-2026-0855</td><td>08:10</td><td><span class="badge br">4h 34min</span></td><td><span class="badge br">Crítico</span></td></tr>
+        <tr><td>OS-00407</td><td>João Batista M.</td><td>Carlos Mendes</td><td>OUV-2026-0862</td><td>09:00</td><td><span class="badge bo">3h 44min</span></td><td><span class="badge bo">Em atend.</span></td></tr>
+        <tr><td>OS-00418</td><td>Condomínio Verde</td><td>Paulo Santos</td><td>OUV-2026-0878</td><td>10:05</td><td><span class="badge bo">2h 39min</span></td><td><span class="badge bo">Em atend.</span></td></tr>
+        <tr><td>OS-00431</td><td>Ana Clara P.</td><td>Ricardo Ferreira</td><td>OUV-2026-0891</td><td>11:20</td><td><span class="badge bx">1h 24min</span></td><td><span class="badge bg">Normal</span></td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="drill" id="drill-livre">
+      <div class="drill-header">
+        <span class="drill-title">Técnicos sem OS aberta alocada (4)</span>
+        <span class="drill-close" onclick="closeDrill('livre')">✕</span>
+      </div>
+      <table class="os-table"><thead><tr><th>Técnico</th><th>Região</th><th>Livre desde</th><th>Tempo ocioso</th><th>Última OS</th><th>OS fechadas hoje</th></tr></thead>
+      <tbody>
+        <tr><td>Marcos Oliveira</td><td>Zona Norte</td><td>09:15</td><td><span class="badge br">3h 29min</span></td><td>OS-00344</td><td>2</td></tr>
+        <tr><td>Renato Lima</td><td>Zona Leste</td><td>09:48</td><td><span class="badge br">2h 56min</span></td><td>OS-00358</td><td>1</td></tr>
+        <tr><td>Felipe Cardoso</td><td>Centro</td><td>10:22</td><td><span class="badge bo">2h 22min</span></td><td>OS-00367</td><td>2</td></tr>
+        <tr><td>André Rocha</td><td>Zona Sul</td><td>10:55</td><td><span class="badge bo">1h 49min</span></td><td>OS-00371</td><td>1</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="drill" id="drill-tmf">
+      <div class="drill-header">
+        <span class="drill-title">Tempo médio de fechamento — OS do dia (1h38 · meta &lt; 2h)</span>
+        <span class="drill-close" onclick="closeDrill('tmf')">✕</span>
+      </div>
+      <table class="os-table"><thead><tr><th>Técnico</th><th>OS fechadas</th><th>TM fechamento</th><th>Melhor</th><th>Pior</th><th>Status meta</th></tr></thead>
+      <tbody>
+        <tr><td>Carlos Mendes</td><td>3</td><td>1h 12min</td><td>0h 58min</td><td>1h 35min</td><td><span class="badge bg">Dentro</span></td></tr>
+        <tr><td>Paulo Santos</td><td>2</td><td>1h 28min</td><td>1h 15min</td><td>1h 41min</td><td><span class="badge bg">Dentro</span></td></tr>
+        <tr><td>Ricardo Ferreira</td><td>2</td><td>1h 44min</td><td>1h 30min</td><td>1h 58min</td><td><span class="badge by">Atenção</span></td></tr>
+        <tr><td>João Ribeiro</td><td>1</td><td>2h 05min</td><td>2h 05min</td><td>2h 05min</td><td><span class="badge br">Acima</span></td></tr>
+        <tr><td>Diego Pires</td><td>1</td><td>1h 55min</td><td>1h 55min</td><td>1h 55min</td><td><span class="badge by">Atenção</span></td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="drill" id="drill-tmd">
+      <div class="drill-header">
+        <span class="drill-title">Tempo médio de deslocamento — OS do dia (24min · meta &lt; 30min)</span>
+        <span class="drill-close" onclick="closeDrill('tmd')">✕</span>
+      </div>
+      <table class="os-table"><thead><tr><th>Técnico</th><th>OS no dia</th><th>TM deslocamento</th><th>Maior deslocamento</th><th>Região</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Carlos Mendes</td><td>3</td><td>18min</td><td>24min (OS-00411)</td><td>Centro</td><td><span class="badge bg">OK</span></td></tr>
+        <tr><td>Paulo Santos</td><td>2</td><td>22min</td><td>28min (OS-00418)</td><td>Zona Sul</td><td><span class="badge bg">OK</span></td></tr>
+        <tr><td>Ricardo Ferreira</td><td>2</td><td>27min</td><td>31min (OS-00431)</td><td>Zona Norte</td><td><span class="badge by">Atenção</span></td></tr>
+        <tr><td>João Ribeiro</td><td>1</td><td>35min</td><td>35min (OS-00402)</td><td>Zona Leste</td><td><span class="badge br">Acima</span></td></tr>
+        <tr><td>Diego Pires</td><td>1</td><td>29min</td><td>29min (OS-00423)</td><td>Zona Norte</td><td><span class="badge bg">OK</span></td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="drill" id="drill-pend">
+      <div class="drill-header">
+        <span class="drill-title">OS baixadas com pendência no dia (6)</span>
+        <span class="drill-close" onclick="closeDrill('pend')">✕</span>
+      </div>
+      <table class="os-table"><thead><tr><th>OS baixada</th><th>Cliente</th><th>Técnico</th><th>Baixada às</th><th>Pendência registrada</th><th>Nova OS gerada</th></tr></thead>
+      <tbody>
+        <tr><td>OS-00271</td><td>Lúcia Aparecida T.</td><td>João Ribeiro</td><td>08:45</td><td>Cabo externo inacessível</td><td><span class="badge bo">OS-00383</span></td></tr>
+        <tr><td>OS-00284</td><td>Padaria Estrela</td><td>Carlos Mendes</td><td>09:10</td><td>CTO inacessível</td><td><span class="badge bo">OS-00391</span></td></tr>
+        <tr><td>OS-00301</td><td>Escritório Centro</td><td>Paulo Santos</td><td>09:55</td><td>Drop danificado</td><td><span class="badge bx">OS-00405</span></td></tr>
+        <tr><td>OS-00315</td><td>Pedro Henrique N.</td><td>Marcos Alves</td><td>10:30</td><td>Roteador trocado</td><td><span class="badge bx">OS-00414</span></td></tr>
+        <tr><td>OS-00328</td><td>Instituto Técnico</td><td>Diego Pires</td><td>11:05</td><td>Config VLAN pendente</td><td><span class="badge bx">OS-00423</span></td></tr>
+        <tr><td>OS-00341</td><td>Vera Lúcia S.</td><td>Renato Lima</td><td>11:48</td><td>Atenuação acima do limite</td><td><span class="badge bx">OS-00430</span></td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="drill" id="drill-log">
+      <div class="drill-header">
+        <span class="drill-title">Técnicos logados (18 de 22 escalados)</span>
+        <span class="drill-close" onclick="closeDrill('log')">✕</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <div class="divlabel" style="color:#4ade80;">Logados e produtivos (11)</div>
+          <div class="tech-chip"><span class="dot dot-g"></span>Carlos Mendes<span style="margin-left:auto;font-size:11px;color:#555;">3 OS fechadas</span></div>
+          <div class="tech-chip"><span class="dot dot-g"></span>Paulo Santos<span style="margin-left:auto;font-size:11px;color:#555;">2 OS fechadas</span></div>
+          <div class="tech-chip"><span class="dot dot-g"></span>Ricardo Ferreira<span style="margin-left:auto;font-size:11px;color:#555;">2 OS fechadas</span></div>
+          <div class="tech-chip"><span class="dot dot-g"></span>Marcos Alves<span style="margin-left:auto;font-size:11px;color:#555;">1 OS fechada</span></div>
+          <div class="tech-chip"><span class="dot dot-g"></span>Sandro Lima<span style="margin-left:auto;font-size:11px;color:#555;">1 OS fechada</span></div>
+          <div class="tech-chip"><span class="dot dot-g"></span>Thiago Costa<span style="margin-left:auto;font-size:11px;color:#555;">Em campo</span></div>
+          <div class="tech-chip"><span class="dot dot-g"></span>Leandro Mota<span style="margin-left:auto;font-size:11px;color:#555;">Em campo</span></div>
+          <div class="tech-chip"><span class="dot dot-g"></span>Fábio Gomes<span style="margin-left:auto;font-size:11px;color:#555;">Em campo</span></div>
+          <div class="tech-chip"><span class="dot dot-g"></span>Henrique P.<span style="margin-left:auto;font-size:11px;color:#555;">Em campo</span></div>
+          <div class="tech-chip"><span class="dot dot-g"></span>Lucas Ferraz<span style="margin-left:auto;font-size:11px;color:#555;">Em campo</span></div>
+          <div class="tech-chip"><span class="dot dot-g"></span>Rafael Dias<span style="margin-left:auto;font-size:11px;color:#555;">Deslocamento</span></div>
+        </div>
+        <div>
+          <div class="divlabel" style="color:#ff9f43;">Com atenção (7)</div>
+          <div class="tech-chip"><span class="dot dot-r"></span>Marcos Oliveira<span style="margin-left:auto;font-size:11px;color:#555;">Livre 3h29</span></div>
+          <div class="tech-chip"><span class="dot dot-r"></span>Renato Lima<span style="margin-left:auto;font-size:11px;color:#555;">Livre 2h56</span></div>
+          <div class="tech-chip"><span class="dot dot-r"></span>Felipe Cardoso<span style="margin-left:auto;font-size:11px;color:#555;">Livre 2h22</span></div>
+          <div class="tech-chip"><span class="dot dot-r"></span>André Rocha<span style="margin-left:auto;font-size:11px;color:#555;">Livre 1h49</span></div>
+          <div class="tech-chip"><span class="dot dot-o"></span>Roberto Teixeira<span style="margin-left:auto;font-size:11px;color:#555;">0 OS fechadas</span></div>
+          <div class="tech-chip"><span class="dot dot-o"></span>Gustavo Nunes<span style="margin-left:auto;font-size:11px;color:#555;">0 OS fechadas</span></div>
+          <div class="tech-chip"><span class="dot dot-o"></span>Diego Pires<span style="margin-left:auto;font-size:11px;color:#555;">0 OS fechadas</span></div>
+          <div class="divlabel" style="color:#444;margin-top:12px;">Não logados (4)</div>
+          <div class="tech-chip"><span class="dot dot-x"></span>Vinícius Ramos<span style="margin-left:auto;font-size:11px;color:#555;">Escalado</span></div>
+          <div class="tech-chip"><span class="dot dot-x"></span>Bruno Castro<span style="margin-left:auto;font-size:11px;color:#555;">Escalado</span></div>
+          <div class="tech-chip"><span class="dot dot-x"></span>Cesar Melo<span style="margin-left:auto;font-size:11px;color:#555;">Escalado</span></div>
+          <div class="tech-chip"><span class="dot dot-x"></span>Igor Nascimento<span style="margin-left:auto;font-size:11px;color:#555;">Escalado</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAINEL INFERIOR -->
+    <div class="section-grid">
+      <div class="card">
+        <div class="card-title">Aging das OS abertas <span class="badge br">12 críticas</span></div>
+        <div class="aging-bar-wrap">
+          <div class="aging-row"><span class="aging-label">&lt; 1h</span><div class="aging-track"><div class="aging-fill" style="width:40%;background:#4ade80;"></div></div><span class="aging-count">19</span></div>
+          <div class="aging-row"><span class="aging-label">1h – 2h</span><div class="aging-track"><div class="aging-fill" style="width:34%;background:#ccff00;"></div></div><span class="aging-count">16</span></div>
+          <div class="aging-row"><span class="aging-label">2h – 4h</span><div class="aging-track"><div class="aging-fill" style="width:17%;background:#ff9f43;"></div></div><span class="aging-count">8</span></div>
+          <div class="aging-row"><span class="aging-label">&gt; 4h</span><div class="aging-track"><div class="aging-fill" style="width:8%;background:#ff6b6b;"></div></div><span class="aging-count">4</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">OS críticas, ouvidoria e pendências</div>
+        <div class="tab-bar">
+          <div class="tab active" onclick="showTab('touv',this)">Ouvidoria (5)</div>
+          <div class="tab" onclick="showTab('tpri',this)">Prioritárias (8)</div>
+          <div class="tab" onclick="showTab('tpend',this)">Pendências (6)</div>
+        </div>
+        <div id="tab-touv">
+          <table class="os-table"><thead><tr><th>OS</th><th>Cliente</th><th>Técnico</th><th>Aging</th></tr></thead>
+          <tbody>
+            <tr class="hl"><td>OS-00381</td><td>Maria Fernanda S.</td><td style="color:#ff6b6b;">Sem alocação</td><td><span class="badge br">5h 12min</span></td></tr>
+            <tr class="hl"><td>OS-00394</td><td>Empresa Alfa Ltda</td><td style="color:#ff6b6b;">Sem alocação</td><td><span class="badge br">4h 34min</span></td></tr>
+            <tr><td>OS-00407</td><td>João Batista M.</td><td>Carlos Mendes</td><td><span class="badge bo">3h 44min</span></td></tr>
+            <tr><td>OS-00418</td><td>Condomínio Verde</td><td>Paulo Santos</td><td><span class="badge bo">2h 39min</span></td></tr>
+            <tr><td>OS-00431</td><td>Ana Clara P.</td><td>Ricardo F.</td><td><span class="badge bx">1h 24min</span></td></tr>
+          </tbody></table>
+        </div>
+        <div id="tab-tpri" style="display:none;">
+          <table class="os-table"><thead><tr><th>OS</th><th>Cliente</th><th>Motivo</th><th>Aging</th></tr></thead>
+          <tbody>
+            <tr class="hl"><td>OS-00376</td><td>Hospital Central</td><td>Empresa crítica</td><td><span class="badge br">5h 48min</span></td></tr>
+            <tr class="hl"><td>OS-00382</td><td>UPA Norte</td><td>Saúde pública</td><td><span class="badge br">5h 02min</span></td></tr>
+            <tr class="hl"><td>OS-00395</td><td>Farmácia 24h</td><td>VIP</td><td><span class="badge bo">4h 21min</span></td></tr>
+            <tr><td>OS-00402</td><td>Escola Municipal</td><td>Educação</td><td><span class="badge bo">3h 15min</span></td></tr>
+            <tr><td>OS-00411</td><td>Delegacia 5ª</td><td>Seg. pública</td><td><span class="badge bo">2h 50min</span></td></tr>
+          </tbody></table>
+        </div>
+        <div id="tab-tpend" style="display:none;">
+          <table class="os-table"><thead><tr><th>OS baixada</th><th>Cliente</th><th>Pendência</th><th>Nova OS</th></tr></thead>
+          <tbody>
+            <tr><td>OS-00271</td><td>Lúcia Aparecida T.</td><td>Cabo externo</td><td><span class="badge bo">OS-00383</span></td></tr>
+            <tr><td>OS-00284</td><td>Padaria Estrela</td><td>CTO inacessível</td><td><span class="badge bo">OS-00391</span></td></tr>
+            <tr><td>OS-00301</td><td>Escritório Centro</td><td>Drop danificado</td><td><span class="badge bx">OS-00405</span></td></tr>
+            <tr><td>OS-00315</td><td>Pedro H. N.</td><td>Roteador trocado</td><td><span class="badge bx">OS-00414</span></td></tr>
+            <tr><td>OS-00328</td><td>Instituto Técnico</td><td>Config VLAN</td><td><span class="badge bx">OS-00423</span></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:10px;color:#333;text-align:right;margin-top:4px;">Dados simulados · Atualização a cada 5 min · V.tal Despacho v0.5</div>
+  </div>
+</div>
+
+<script>
+function tick(){
+  const d=new Date();
+  document.getElementById('clock').textContent=
+    d.toLocaleDateString('pt-BR')+' · '+
+    d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+tick();setInterval(tick,1000);
+
+const drills=['os','pri','ouv','livre','tmf','tmd','pend','log'];
+function toggleDrill(id,el){
+  const drill=document.getElementById('drill-'+id);
+  const isOpen=drill.classList.contains('open');
+  drills.forEach(d=>{
+    document.getElementById('drill-'+d).classList.remove('open');
+    const k=document.getElementById('kpi-'+d);
+    if(k)k.classList.remove('active');
+  });
+  if(!isOpen){
+    drill.classList.add('open');
+    el.classList.add('active');
+    drill.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+}
+function closeDrill(id){
+  document.getElementById('drill-'+id).classList.remove('open');
+  const k=document.getElementById('kpi-'+id);
+  if(k)k.classList.remove('active');
+}
+function showTab(id,el){
+  ['touv','tpri','tpend'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display=t===id?'':'none';
+  });
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
